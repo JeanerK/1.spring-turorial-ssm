@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeanerk.book.mapper.BookMapper">
+
+    <parameterMap id="book" type="com.jeanerk.book.dto.Book"/>
+
+    <resultMap id="bookMap" type="com.jeanerk.book.dto.Book"/>
+
+    <update id="updateBook" parameterMap="book">
+        update T_BOOK SET BOOK_NAME = #{bookName} where BOOK_ID = #{bookId}
+    </update>
+
+    <insert id="insertBook" parameterMap="book">
+        insert into T_BOOK(BOOK_NAME, AUTHOR, PRICE)
+        VALUES (#{bookName}, #{author}, #{price})
+    </insert>
+
+    <select id="selectBooks" parameterMap="book" resultMap="bookMap">
+        select
+        BOOK_ID,
+        BOOK_NAME,
+        AUTHOR,
+        PRICE
+        from T_BOOK
+        <where>
+            <if test="bookName != null and bookName != ''">
+                and BOOK_NAME = #{bookName}
+            </if>
+            <if test="bookId != null">
+                and BOOK_ID = #{bookId}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectBookById" resultMap="bookMap" parameterType="java.lang.Long">
+        select
+        BOOK_ID,
+        BOOK_NAME,
+        AUTHOR,
+        PRICE
+        from T_BOOK
+        where BOOK_ID = #{bookId}
+    </select>
+
+    <delete id="deleteProductById" parameterType="java.lang.Long">
+        delete from T_BOOK where BOOK_ID = #{bookId}
+    </delete>
+</mapper>
